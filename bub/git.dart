@@ -1,1 +1,0 @@
-const git = 0;
