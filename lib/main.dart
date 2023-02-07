@@ -32,11 +32,19 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext content) {
     return Scaffold(
-      body: GoogleMap(
-        myLocationButtonEnabled: false,
-        zoomControlsEnabled: false,
-        initialCameraPosition: _initialCameraPosition,
-      )
+        body: Column(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,  // or use fixed size like 200
+              height: MediaQuery.of(context).size.height-100,
+              child: GoogleMap(
+                      myLocationButtonEnabled: false,
+                      zoomControlsEnabled: false,
+                      initialCameraPosition: _initialCameraPosition,
+                    )
+            ),
+            ElevatedButton(onPressed: ()=>{}, child: Text('Wyszukaj Nabożeństwa'))
+    ])
     );
   }
 }
