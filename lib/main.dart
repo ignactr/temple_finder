@@ -32,19 +32,25 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext content) {
     return Scaffold(
-        body: Column(
+      backgroundColor: Color(0xFF0f172a),
+        body: Padding(padding:EdgeInsets.all(10), child: Column(
           children: [
             SizedBox(
               width: MediaQuery.of(context).size.width,  // or use fixed size like 200
               height: MediaQuery.of(context).size.height-100,
-              child: GoogleMap(
+              child: const GoogleMap(
                       myLocationButtonEnabled: false,
                       zoomControlsEnabled: false,
                       initialCameraPosition: _initialCameraPosition,
                     )
             ),
-            ElevatedButton(onPressed: ()=>{}, child: Text('Wyszukaj Nabożeństwa'))
+            SizedBox(height:10),
+            SizedBox(
+              width: 180,
+              height: 60,
+              child:ElevatedButton(onPressed: ()=>{}, style: ElevatedButton.styleFrom(primary: Color(0xFF374151)),child: Text('Wyszukaj Nabożeństwa',textAlign: TextAlign.center, style: TextStyle(fontSize: 20)))
+            )
     ])
-    );
+    ));
   }
 }
