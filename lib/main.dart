@@ -29,7 +29,7 @@ class _MyAppState extends State<MyApp> {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: (_pageNumber == 1) ? MapScreen(enterPage) : PropList(enterPage),
+      home: (_pageNumber == 0) ? MapScreen(enterPage) : PropList(enterPage),
     );
   }
 }
