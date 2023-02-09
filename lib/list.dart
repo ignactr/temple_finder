@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'test_data.dart';
+import 'package:flutter_geocoder/geocoder.dart';
 
 class PropListItem extends StatelessWidget {
   final String name;
@@ -12,7 +13,7 @@ class PropListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
         child: InkWell(
-      onTap: () => {},
+      onTap: () => {print('git')},
       child: Container(
         child: Column(children: [
           Text(name, style: TextStyle(fontSize: 15)),
@@ -30,8 +31,20 @@ class PropList extends StatelessWidget {
   final enterPage;
   PropList(@required this.enterPage);
 
+  Future<void> nameDistanceCoordinates(List<List<String>> givenList) async {
+    List<List<String>> listToReturn = [];
+    givenList.forEach((row) async {
+      var query = row[1];
+      var results = await Geocoder.local.findAddressesFromQuery(query);
+      var firstResult = results.first;
+      print(firstResult.coordinates);
+      print('elo');
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    nameDistanceCoordinates(templeList);
     return Column(children: [
       Expanded(
           child: ListView.builder(
