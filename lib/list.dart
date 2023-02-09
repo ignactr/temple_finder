@@ -5,7 +5,11 @@ import 'package:flutter_geocoder/geocoder.dart';
 class PropListItem extends StatelessWidget {
   final String name;
   final String address;
-  PropListItem(@required this.name, @required this.address);
+  //final nameAndLocationList;
+  PropListItem(
+    @required this.name,
+    @required this.address,
+  );
 
   double distance = 12.5;
 
@@ -13,7 +17,7 @@ class PropListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
         child: InkWell(
-      onTap: () => {print('git')},
+      onTap: () => {},
       child: Container(
         child: Column(children: [
           Text(name, style: TextStyle(fontSize: 15)),
@@ -28,23 +32,26 @@ class PropListItem extends StatelessWidget {
 }
 
 class PropList extends StatelessWidget {
-  final enterPage;
-  PropList(@required this.enterPage);
+  final Function enterPage;
+  PropList(this.enterPage);
 
-  Future<void> nameDistanceCoordinates(List<List<String>> givenList) async {
-    List<List<String>> listToReturn = [];
-    givenList.forEach((row) async {
-      var query = row[1];
-      var results = await Geocoder.local.findAddressesFromQuery(query);
-      var firstResult = results.first;
-      print(firstResult.coordinates);
-      print('elo');
-    });
+  Future<List<List>> nameAndLocationList(List<List<String>> givenList) async {
+    List<List> listToReturn = [];
+    await Future.forEach(
+      givenList,
+      (row) async {
+        var query = row[1];
+        var results = await Geocoder.local.findAddressesFromQuery(query);
+        var firstResult = results.first;
+        listToReturn.add([row[0], firstResult.coordinates]);
+      },
+    );
+    print('lista: $listToReturn');
+    return listToReturn;
   }
 
   @override
   Widget build(BuildContext context) {
-    nameDistanceCoordinates(templeList);
     return Column(children: [
       Expanded(
           child: ListView.builder(
@@ -54,15 +61,19 @@ class PropList extends StatelessWidget {
           return PropListItem(templeList[index][0], templeList[index][1]);
         },
       )),
+      Text(
+        nameAndLocationList(templeList).toString(),
+        style: TextStyle(fontSize: 18),
+      ),
       ElevatedButton(
         onPressed: () => {enterPage(0)},
-        child: Text(
+        style:
+            ElevatedButton.styleFrom(backgroundColor: const Color(0xFF374151)),
+        child: const Text(
           'Powrót',
           style: TextStyle(fontSize: 18),
         ),
-        style:
-            ElevatedButton.styleFrom(backgroundColor: const Color(0xFF374151)),
-      )
+      ),
     ]);
   }
 }
