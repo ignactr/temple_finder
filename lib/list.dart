@@ -31,11 +31,21 @@ class PropListItem extends StatelessWidget {
   }
 }
 
-class PropList extends StatelessWidget {
+class PropList extends StatefulWidget {
   final Function enterPage;
   PropList(this.enterPage);
 
-  Future<List<List>> nameAndLocationList(List<List<String>> givenList) async {
+  @override
+  _PropList createState() => _PropList(enterPage);
+}
+
+class _PropList extends State<PropList> {
+  final Function enterPage;
+  _PropList(this.enterPage);
+
+  List<List>? listWithCoords;
+
+  Future<void> nameAndLocationList(List<List<String>> givenList) async {
     List<List> listToReturn = [];
     await Future.forEach(
       givenList,
@@ -47,7 +57,15 @@ class PropList extends StatelessWidget {
       },
     );
     print('lista: $listToReturn');
-    return listToReturn;
+    setState(() {
+      listWithCoords = listToReturn;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    nameAndLocationList(templeList);
   }
 
   @override
@@ -62,8 +80,8 @@ class PropList extends StatelessWidget {
         },
       )),
       Text(
-        nameAndLocationList(templeList).toString(),
-        style: TextStyle(fontSize: 18),
+        listWithCoords.toString(),
+        style: const TextStyle(fontSize: 18),
       ),
       ElevatedButton(
         onPressed: () => {enterPage(0)},
