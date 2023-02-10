@@ -14,19 +14,28 @@ class PropListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-        child: InkWell(
-      onTap: () => {},
-      child: Container(
-        child: Column(children: [
-          Text(name, style: const TextStyle(fontSize: 15)),
-          Text(coords.toString(), style: const TextStyle(fontSize: 15)),
-          Text('${distance} km', style: const TextStyle(fontSize: 15)),
-        ]),
-        margin: EdgeInsets.fromLTRB(0, 20, 0, 20),
-        padding: const EdgeInsets.all(3),
-      ),
-    ));
+    return Container(
+      margin: const EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 3),
+      decoration: BoxDecoration(
+          border: Border.all(
+            color: Colors.black,
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(20))),
+      child: Material(
+          child: InkWell(
+        onTap: () => {},
+        child: Container(
+          child: Row(children: [
+            Expanded(
+              child: Text(name, style: const TextStyle(fontSize: 18)),
+            ),
+            Text('${distance.toString().substring(0, 3)} km',
+                style: const TextStyle(fontSize: 19)),
+          ]),
+          padding: const EdgeInsets.all(6),
+        ),
+      )),
+    );
   }
 }
 
@@ -91,6 +100,7 @@ class _PropList extends State<PropList> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
+      const SizedBox(height: 20),
       PropListItem(
           listWithCoords[0][0], listWithCoords[0][1], listWithCoords[0][2]),
       PropListItem(
