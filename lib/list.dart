@@ -14,28 +14,24 @@ class PropListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: 10, right: 10, top: 3, bottom: 3),
-      decoration: BoxDecoration(
-          border: Border.all(
-            color: Colors.black,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(20))),
-      child: Material(
-          child: InkWell(
-        onTap: () => {},
-        child: Container(
-          child: Row(children: [
-            Expanded(
-              child: Text(name, style: const TextStyle(fontSize: 18)),
-            ),
-            Text('${distance.toString().substring(0, 3)} km',
-                style: const TextStyle(fontSize: 19)),
-          ]),
-          padding: const EdgeInsets.all(6),
-        ),
-      )),
-    );
+    return Tooltip(
+        message: 'znajdź drogę do tego miejsca',
+        child: Card(
+            color: const Color(0xFFe5e7eb),
+            shadowColor: const Color(0xFFe5e7eb),
+            child: InkWell(
+              onTap: () => {},
+              child: Container(
+                child: Row(children: [
+                  Expanded(
+                    child: Text(name, style: const TextStyle(fontSize: 18)),
+                  ),
+                  Text('${distance.toString().substring(0, 3)} km',
+                      style: const TextStyle(fontSize: 19)),
+                ]),
+                padding: const EdgeInsets.all(6),
+              ),
+            )));
   }
 }
 
@@ -85,7 +81,6 @@ class _PropList extends State<PropList> {
         ]);
       },
     );
-    print(listToReturn);
     setState(() {
       listWithCoords = listToReturn;
     });
