@@ -119,15 +119,18 @@ class _PropList extends State<PropList> {
       Expanded(
         child: Align(
             alignment: Alignment.bottomCenter,
-            child: ElevatedButton(
-              onPressed: () => {enterPage(0)},
-              style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF374151)),
-              child: const Text(
-                'Powrót',
-                style: TextStyle(fontSize: 18),
-              ),
-            )),
+            child: Container(
+                margin: const EdgeInsets.only(bottom: 20),
+                child: ElevatedButton(
+                  onPressed: () => {enterPage(0)},
+                  style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.all(10),
+                      backgroundColor: const Color(0xFF374151)),
+                  child: const Text(
+                    'Powrót',
+                    style: TextStyle(fontSize: 21),
+                  ),
+                ))),
       )
     ]);
   }
