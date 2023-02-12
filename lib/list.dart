@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:geolocator/geolocator.dart';
+//import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'test_data.dart';
 import 'package:flutter_geocoder/geocoder.dart';
@@ -9,8 +9,16 @@ class PropListItem extends StatelessWidget {
   final String name;
   final Coordinates coords;
   final double distance;
-  //final nameAndLocationList;
-  PropListItem(this.name, this.coords, this.distance);
+  final String address;
+  PropListItem(this.name, this.coords, this.distance, this.address);
+
+  String formattedAddress() {
+    if (address.length > 50) {
+      return address.substring(0, 51) + '...';
+    } else {
+      return address;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,18 +28,21 @@ class PropListItem extends StatelessWidget {
             color: const Color(0xFFe5e7eb),
             shadowColor: const Color(0xFFe5e7eb),
             child: InkWell(
-              onTap: () => {},
-              child: Container(
-                child: Row(children: [
-                  Expanded(
-                    child: Text(name, style: const TextStyle(fontSize: 18)),
-                  ),
-                  Text('${distance.toString().substring(0, 3)} km',
-                      style: const TextStyle(fontSize: 19)),
-                ]),
-                padding: const EdgeInsets.all(6),
-              ),
-            )));
+                onTap: () => {},
+                child: Container(
+                  padding: const EdgeInsets.all(6),
+                  child: Column(children: [
+                    Row(children: [
+                      Expanded(
+                        child: Text(name, style: const TextStyle(fontSize: 21)),
+                      ),
+                      Text('${distance.toString().substring(0, 3)} km',
+                          style: const TextStyle(fontSize: 21)),
+                    ]),
+                    Text(formattedAddress(),
+                        style: const TextStyle(fontSize: 15))
+                  ]),
+                ))));
   }
 }
 
@@ -77,7 +88,8 @@ class _PropList extends State<PropList> {
               firstResult.coordinates.latitude,
               firstResult.coordinates.longitude,
               position2.target.latitude,
-              position2.target.longitude)
+              position2.target.longitude),
+          row[1]
         ]);
       },
     );
@@ -96,23 +108,27 @@ class _PropList extends State<PropList> {
   Widget build(BuildContext context) {
     return Column(children: [
       const SizedBox(height: 20),
-      PropListItem(
-          listWithCoords[0][0], listWithCoords[0][1], listWithCoords[0][2]),
-      PropListItem(
-          listWithCoords[1][0], listWithCoords[1][1], listWithCoords[1][2]),
-      PropListItem(
-          listWithCoords[2][0], listWithCoords[2][1], listWithCoords[2][2]),
-      PropListItem(
-          listWithCoords[3][0], listWithCoords[3][1], listWithCoords[3][2]),
-      ElevatedButton(
-        onPressed: () => {enterPage(0)},
-        style:
-            ElevatedButton.styleFrom(backgroundColor: const Color(0xFF374151)),
-        child: const Text(
-          'Powrót',
-          style: TextStyle(fontSize: 18),
-        ),
-      ),
+      PropListItem(listWithCoords[0][0], listWithCoords[0][1],
+          listWithCoords[0][2], listWithCoords[0][3]),
+      PropListItem(listWithCoords[1][0], listWithCoords[1][1],
+          listWithCoords[1][2], listWithCoords[1][3]),
+      PropListItem(listWithCoords[2][0], listWithCoords[2][1],
+          listWithCoords[2][2], listWithCoords[2][3]),
+      PropListItem(listWithCoords[3][0], listWithCoords[3][1],
+          listWithCoords[3][2], listWithCoords[3][3]),
+      Expanded(
+        child: Align(
+            alignment: Alignment.bottomCenter,
+            child: ElevatedButton(
+              onPressed: () => {enterPage(0)},
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFF374151)),
+              child: const Text(
+                'Powrót',
+                style: TextStyle(fontSize: 18),
+              ),
+            )),
+      )
     ]);
   }
 }
