@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'list.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,16 +26,23 @@ class _MyAppState extends State<MyApp> {
     LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    print(
-        '---------------------------------------------------------------------------------------');
-    if (!serviceEnabled) {
-      print('Location services are disabled');
+    //if (!serviceEnabled) {
+    //  print('Location services are disabled');
+    //}
+    //permission = await Geolocator.checkPermission();
+    //if (permission == LocationPermission.denied) {
+    //  print(
+    //      'Location permissions are permanently denied, we cannot request permissions');
+    //}
+    var status = await Permission.location.status;
+    if (status.isDenied) {
+      Map<Permission, PermissionStatus> status =
+          await [Permission.location].request();
     }
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      print(
-          'Location permissions are permanently denied, we cannot request permissions');
+    if (await Permission.location.isPermanentlyDenied) {
+      openAppSettings();
     }
+
     Position _currentPosition = await Geolocator.getCurrentPosition();
     print('Device`s position: $_currentPosition');
     LatLng convertedPosition =

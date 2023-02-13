@@ -39,6 +39,7 @@ dependencies:
     git:
       url: https://github.com/JCKodel/flutter_geocoder.git
   geolocator: ^9.0.2
+  permission_handler: ^10.2.0
 
 dev_dependencies:
   flutter_test:
