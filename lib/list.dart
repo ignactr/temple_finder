@@ -12,6 +12,11 @@ class PropListItem extends StatelessWidget {
   final String address;
   PropListItem(this.name, this.coords, this.distance, this.address);
 
+  double roundDouble(double value, int places) {
+    double mod = pow(10.0, places).toDouble();
+    return ((value * mod).round().toDouble() / mod);
+  }
+
   String formattedAddress() {
     if (address.length > 50) {
       return address.substring(0, 51) + '...';
@@ -36,7 +41,7 @@ class PropListItem extends StatelessWidget {
                       Expanded(
                         child: Text(name, style: const TextStyle(fontSize: 21)),
                       ),
-                      Text('${distance.toString().substring(0, 3)} km',
+                      Text('${roundDouble(distance, 1)} km',
                           style: const TextStyle(fontSize: 21)),
                     ]),
                     Text(formattedAddress(),
