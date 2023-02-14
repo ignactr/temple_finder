@@ -65,8 +65,6 @@ class _PropList extends State<PropList> {
   final CameraPosition devicesLocation;
   _PropList(this.enterPage, this.devicesLocation);
 
-  List<List> listWithCoords = [];
-
   //function getDistance takes coordinates of two locations and returns distance between them in straight line (km)
   double getDistance(lat1, lon1, lat2, lon2) {
     double p = 0.017453292519943295;
@@ -77,7 +75,7 @@ class _PropList extends State<PropList> {
   }
 
   //function nameAndLocationList uses geocoder packages to turn adress from givenList to coordinates and then display them with names of locations in listToReturn
-  Future<void> nameAndLocationList(
+  Future<List<List>> nameAndLocationList(
       List<List<String>> givenList, CameraPosition position2) async {
     List<List> listToReturn = [];
     await Future.forEach(
@@ -98,45 +96,29 @@ class _PropList extends State<PropList> {
         ]);
       },
     );
-    setState(() {
-      listWithCoords = listToReturn;
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    nameAndLocationList(templeList, devicesLocation);
+    return listToReturn;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(children: [
-      const SizedBox(height: 20),
-      PropListItem(listWithCoords[0][0], listWithCoords[0][1],
-          listWithCoords[0][2], listWithCoords[0][3]),
-      PropListItem(listWithCoords[1][0], listWithCoords[1][1],
-          listWithCoords[1][2], listWithCoords[1][3]),
-      PropListItem(listWithCoords[2][0], listWithCoords[2][1],
-          listWithCoords[2][2], listWithCoords[2][3]),
-      PropListItem(listWithCoords[3][0], listWithCoords[3][1],
-          listWithCoords[3][2], listWithCoords[3][3]),
-      Expanded(
-        child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-                margin: const EdgeInsets.only(bottom: 20),
-                child: ElevatedButton(
-                  onPressed: () => {enterPage(0)},
-                  style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(10),
-                      backgroundColor: const Color(0xFF374151)),
-                  child: const Text(
-                    'Powrót',
-                    style: TextStyle(fontSize: 21),
-                  ),
-                ))),
-      )
-    ]);
+    return FutureBuilder(
+        future: nameAndLocationList(templeList, devicesLocation),
+        builder: (context, snapshot) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            return ListView.builder(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (context, index) {
+                return PropListItem(
+                    snapshot.data![index][0],
+                    snapshot.data![index][1],
+                    snapshot.data![index][2],
+                    snapshot.data![index][3]);
+              },
+            );
+          } else {
+            return const Text('ładowanie...');
+          }
+        });
   }
 }
