@@ -106,18 +106,45 @@ class _PropList extends State<PropList> {
         builder: (context, snapshot) {
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
-            return ListView.builder(
-              itemCount: snapshot.data!.length,
-              itemBuilder: (context, index) {
-                return PropListItem(
-                    snapshot.data![index][0],
-                    snapshot.data![index][1],
-                    snapshot.data![index][2],
-                    snapshot.data![index][3]);
-              },
+            return Column(
+              children: [
+                const SizedBox(height: 20),
+                ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    return PropListItem(
+                        snapshot.data![index][0],
+                        snapshot.data![index][1],
+                        snapshot.data![index][2],
+                        snapshot.data![index][3]);
+                  },
+                ),
+                Expanded(
+                  child: Align(
+                      alignment: Alignment.bottomCenter,
+                      child: Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          child: ElevatedButton(
+                            onPressed: () => {enterPage(0)},
+                            style: ElevatedButton.styleFrom(
+                                padding: const EdgeInsets.all(10),
+                                backgroundColor: const Color(0xFF374151)),
+                            child: const Text(
+                              'Powrót',
+                              style: TextStyle(fontSize: 21),
+                            ),
+                          ))),
+                )
+              ],
             );
           } else {
-            return const Text('ładowanie...');
+            return const Align(
+                alignment: Alignment.center,
+                child: SizedBox(
+                    width: 200,
+                    height: 200,
+                    child: CircularProgressIndicator()));
           }
         });
   }
