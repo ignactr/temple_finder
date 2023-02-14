@@ -4,6 +4,8 @@ import 'list.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'startmapscreen.dart';
+import 'package:flutter_geocoder/geocoder.dart';
+import 'patchfind.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,9 +19,19 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  int _pageNumber = 0;
+  Coordinates? coordsOfDestination;
+
+  void patchFindHandler(Coordinates coords) {
+    setState(() {
+      coordsOfDestination = coords;
+      _pageNumber = 2;
+    });
+  }
+
   Future<CameraPosition> getCurrentLocation() async {
     bool serviceEnabled;
-    LocationPermission permission;
+    //LocationPermission permission;
 
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     var status = await Permission.location.status;
@@ -38,7 +50,6 @@ class _MyAppState extends State<MyApp> {
     return CameraPosition(target: convertedPosition, zoom: 15);
   }
 
-  int _pageNumber = 0;
   void enterPage(int pageNumber) {
     setState(() {
       _pageNumber = pageNumber;
@@ -59,7 +70,9 @@ class _MyAppState extends State<MyApp> {
               ),
               home: (_pageNumber == 0)
                   ? StartMapScreen(enterPage, snapshot.data!)
-                  : PropList(enterPage, snapshot.data!),
+                  : (_pageNumber == 1)
+                      ? PropList(enterPage, snapshot.data!, patchFindHandler)
+                      : PatchFind(),
             );
           } else {
             return const Align(
