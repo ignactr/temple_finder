@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 //import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'test_data.dart';
 import 'package:flutter_geocoder/geocoder.dart';
 import 'dart:math';
+import 'listoftemples.dart';
 
 class PropListItem extends StatelessWidget {
   final String name;
   final Coordinates coords;
   final double distance;
   final String address;
-  PropListItem(this.name, this.coords, this.distance, this.address);
+  final Function patchFindHandler;
+  PropListItem(this.name, this.coords, this.distance, this.address,
+      this.patchFindHandler);
 
   double roundDouble(double value, int places) {
     double mod = pow(10.0, places).toDouble();
@@ -33,7 +35,7 @@ class PropListItem extends StatelessWidget {
             color: const Color(0xFFe5e7eb),
             shadowColor: const Color(0xFFe5e7eb),
             child: InkWell(
-                onTap: () => {},
+                onTap: () => {patchFindHandler(coords)},
                 child: Container(
                   padding: const EdgeInsets.all(6),
                   child: Column(children: [
@@ -54,16 +56,19 @@ class PropListItem extends StatelessWidget {
 class PropList extends StatefulWidget {
   final Function enterPage;
   final CameraPosition devicesLocation;
-  PropList(this.enterPage, this.devicesLocation);
+  final Function patchFindHandler;
+  PropList(this.enterPage, this.devicesLocation, this.patchFindHandler);
 
   @override
-  _PropList createState() => _PropList(enterPage, devicesLocation);
+  _PropList createState() =>
+      _PropList(enterPage, devicesLocation, patchFindHandler);
 }
 
 class _PropList extends State<PropList> {
   final Function enterPage;
   final CameraPosition devicesLocation;
-  _PropList(this.enterPage, this.devicesLocation);
+  final Function patchFindHandler;
+  _PropList(this.enterPage, this.devicesLocation, this.patchFindHandler);
 
   //function getDistance takes coordinates of two locations and returns distance between them in straight line (km)
   double getDistance(lat1, lon1, lat2, lon2) {
@@ -117,7 +122,8 @@ class _PropList extends State<PropList> {
                         snapshot.data![index][0],
                         snapshot.data![index][1],
                         snapshot.data![index][2],
-                        snapshot.data![index][3]);
+                        snapshot.data![index][3],
+                        patchFindHandler);
                   },
                 ),
                 Expanded(
