@@ -72,7 +72,11 @@ class _MyAppState extends State<MyApp> {
                   ? StartMapScreen(enterPage, snapshot.data!)
                   : (_pageNumber == 1)
                       ? PropList(enterPage, snapshot.data!, patchFindHandler)
-                      : PatchFind(),
+                      : PatchFind(
+                          LatLng(coordsOfDestination!.latitude!,
+                              coordsOfDestination!.longitude!),
+                          LatLng(snapshot.data!.target.latitude,
+                              snapshot.data!.target.longitude)),
             );
           } else {
             return const Align(
