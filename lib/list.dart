@@ -10,7 +10,7 @@ class PropListItem extends StatelessWidget {
   final Coordinates coords;
   final double distance;
   final String address;
-  final Function patchFindHandler;
+  final patchFindHandler;
   PropListItem(this.name, this.coords, this.distance, this.address,
       this.patchFindHandler);
 
@@ -56,7 +56,7 @@ class PropListItem extends StatelessWidget {
 class PropList extends StatefulWidget {
   final Function enterPage;
   final CameraPosition devicesLocation;
-  final Function patchFindHandler;
+  final patchFindHandler;
   PropList(this.enterPage, this.devicesLocation, this.patchFindHandler);
 
   @override
@@ -67,7 +67,7 @@ class PropList extends StatefulWidget {
 class _PropList extends State<PropList> {
   final Function enterPage;
   final CameraPosition devicesLocation;
-  final Function patchFindHandler;
+  final patchFindHandler;
   _PropList(this.enterPage, this.devicesLocation, this.patchFindHandler);
 
   //function getDistance takes coordinates of two locations and returns distance between them in straight line (km)

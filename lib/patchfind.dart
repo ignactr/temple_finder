@@ -10,8 +10,6 @@ class PatchFind extends StatefulWidget {
 class _PatchFindState extends State<PatchFind> {
   @override
   Widget build(BuildContext context) {
-    return const Material(
-      child: Text('working in progress'),
-    );
+    return const Text('working in progress');
   }
 }
