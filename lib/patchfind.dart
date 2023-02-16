@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 
 class PatchFind extends StatefulWidget {
   final LatLng coordsOfDestination;
@@ -22,6 +23,8 @@ class _PatchFindState extends State<PatchFind> {
 
   final Completer<GoogleMapController> _controller = Completer();
   List<LatLng> polylineCoordinates = [];
+  LatLng? currentLocation;
+  Timer? timer;
 
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
@@ -38,30 +41,51 @@ class _PatchFindState extends State<PatchFind> {
     setState(() {});
   }
 
+  Future<void> getCurrentLocation() async {
+    Position currentPosition = await Geolocator.getCurrentPosition();
+    setState(() {
+      currentLocation =
+          LatLng(currentPosition.latitude, currentPosition.longitude);
+    });
+  }
+
   @override
   void initState() {
+    getCurrentLocation();
     getPolyPoints();
+    timer = Timer.periodic(
+        const Duration(seconds: 1), (Timer t) => getCurrentLocation());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(target: sourceLocation, zoom: 15),
-      markers: {
-        Marker(markerId: const MarkerId("początek"), position: sourceLocation),
-        Marker(markerId: const MarkerId("cel"), position: coordsOfDestination)
-      },
-      polylines: {
-        Polyline(
-            polylineId: const PolylineId("route"),
-            points: polylineCoordinates,
-            color: const Color(0xFF334155),
-            width: 5),
-      },
-      onMapCreated: (mapController) {
-        _controller.complete(mapController);
-      },
-    );
+    return currentLocation == null
+        ? const Center(child: Text('Loading'))
+        : GoogleMap(
+            initialCameraPosition:
+                CameraPosition(target: currentLocation!, zoom: 15),
+            markers: {
+              Marker(
+                  markerId: const MarkerId("currentLocation"),
+                  position: currentLocation!),
+              Marker(
+                  markerId: const MarkerId("początek"),
+                  position: sourceLocation),
+              Marker(
+                  markerId: const MarkerId("cel"),
+                  position: coordsOfDestination)
+            },
+            polylines: {
+              Polyline(
+                  polylineId: const PolylineId("route"),
+                  points: polylineCoordinates,
+                  color: const Color(0xFF334155),
+                  width: 5),
+            },
+            onMapCreated: (mapController) {
+              _controller.complete(mapController);
+            },
+          );
   }
 }
