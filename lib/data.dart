@@ -121,7 +121,7 @@ List<List<Object>> data = [
   ],
   [
     'Wojskowa pw. św. Jerzego',
-    'ul. Kawaleryjska 70 (koresp., osiedle domów szeregowych  przy ul. Rzymowskiego 43 (siedziba  15-325 Białystok',
+    'ul. Kawaleryjska 70 15-325 Białystok',
     ['07:30', '09:00', '10:30', '12:00'],
     ['07:00', '18:00']
   ],
