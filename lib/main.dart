@@ -44,7 +44,6 @@ class _MyAppState extends State<MyApp> {
     }
 
     Position _currentPosition = await Geolocator.getCurrentPosition();
-    print('Device`s position: $_currentPosition');
     LatLng convertedPosition =
         LatLng(_currentPosition.latitude, _currentPosition.longitude);
     return CameraPosition(target: convertedPosition, zoom: 15);

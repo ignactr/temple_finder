@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 
 class PatchFind extends StatefulWidget {
   final LatLng coordsOfDestination;
@@ -22,6 +23,35 @@ class _PatchFindState extends State<PatchFind> {
 
   final Completer<GoogleMapController> _controller = Completer();
   List<LatLng> polylineCoordinates = [];
+  LatLng? currentLocation;
+  Timer? timer;
+  BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
+
+  void setCustomMarkerIcon() {
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/church.jpg")
+        .then(
+      (icon) {
+        destinationIcon = icon;
+      },
+    );
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/person.jpg")
+        .then(
+      (icon) {
+        currentLocationIcon = icon;
+      },
+    );
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/start.png")
+        .then(
+      (icon) {
+        sourceIcon = icon;
+      },
+    );
+  }
 
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
@@ -38,30 +68,58 @@ class _PatchFindState extends State<PatchFind> {
     setState(() {});
   }
 
+  Future<void> getCurrentLocation() async {
+    Position currentPosition = await Geolocator.getCurrentPosition();
+    setState(() {
+      currentLocation =
+          LatLng(currentPosition.latitude, currentPosition.longitude);
+    });
+  }
+
   @override
   void initState() {
+    getCurrentLocation();
     getPolyPoints();
+    timer = Timer.periodic(
+        const Duration(seconds: 1), (Timer t) => getCurrentLocation());
+    setCustomMarkerIcon();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GoogleMap(
-      initialCameraPosition: CameraPosition(target: sourceLocation, zoom: 15),
-      markers: {
-        Marker(markerId: const MarkerId("początek"), position: sourceLocation),
-        Marker(markerId: const MarkerId("cel"), position: coordsOfDestination)
-      },
-      polylines: {
-        Polyline(
-            polylineId: const PolylineId("route"),
-            points: polylineCoordinates,
-            color: const Color(0xFF334155),
-            width: 5),
-      },
-      onMapCreated: (mapController) {
-        _controller.complete(mapController);
-      },
-    );
+    return currentLocation == null
+        ? const Center(child: Text('Loading'))
+        : GoogleMap(
+            initialCameraPosition:
+                CameraPosition(target: currentLocation!, zoom: 15),
+            markers: {
+              Marker(
+                markerId: const MarkerId("currentLocation"),
+                position: currentLocation!,
+                //icon: currentLocationIcon
+              ),
+              Marker(
+                markerId: const MarkerId("sourceLocation"),
+                position: sourceLocation,
+                //icon: sourceIcon
+              ),
+              Marker(
+                markerId: const MarkerId("destination"),
+                position: coordsOfDestination,
+                //icon: destinationIcon
+              )
+            },
+            polylines: {
+              Polyline(
+                  polylineId: const PolylineId("route"),
+                  points: polylineCoordinates,
+                  color: const Color(0xFF334155),
+                  width: 5),
+            },
+            onMapCreated: (mapController) {
+              _controller.complete(mapController);
+            },
+          );
   }
 }
