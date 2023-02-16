@@ -25,6 +25,33 @@ class _PatchFindState extends State<PatchFind> {
   List<LatLng> polylineCoordinates = [];
   LatLng? currentLocation;
   Timer? timer;
+  BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
+
+  void setCustomMarkerIcon() {
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/church.jpg")
+        .then(
+      (icon) {
+        destinationIcon = icon;
+      },
+    );
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/person.jpg")
+        .then(
+      (icon) {
+        currentLocationIcon = icon;
+      },
+    );
+    BitmapDescriptor.fromAssetImage(
+            ImageConfiguration.empty, "assets/start.png")
+        .then(
+      (icon) {
+        sourceIcon = icon;
+      },
+    );
+  }
 
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
@@ -55,6 +82,7 @@ class _PatchFindState extends State<PatchFind> {
     getPolyPoints();
     timer = Timer.periodic(
         const Duration(seconds: 1), (Timer t) => getCurrentLocation());
+    setCustomMarkerIcon();
     super.initState();
   }
 
@@ -67,14 +95,20 @@ class _PatchFindState extends State<PatchFind> {
                 CameraPosition(target: currentLocation!, zoom: 15),
             markers: {
               Marker(
-                  markerId: const MarkerId("currentLocation"),
-                  position: currentLocation!),
+                markerId: const MarkerId("currentLocation"),
+                position: currentLocation!,
+                //icon: currentLocationIcon
+              ),
               Marker(
-                  markerId: const MarkerId("początek"),
-                  position: sourceLocation),
+                markerId: const MarkerId("sourceLocation"),
+                position: sourceLocation,
+                //icon: sourceIcon
+              ),
               Marker(
-                  markerId: const MarkerId("cel"),
-                  position: coordsOfDestination)
+                markerId: const MarkerId("destination"),
+                position: coordsOfDestination,
+                //icon: destinationIcon
+              )
             },
             polylines: {
               Polyline(
