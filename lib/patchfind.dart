@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:maps_launcher/maps_launcher.dart';
 
 class PatchFind extends StatefulWidget {
   final LatLng coordsOfDestination;
@@ -141,7 +142,11 @@ class _PatchFindState extends State<PatchFind> {
                         width: 180,
                         height: 60,
                         child: ElevatedButton(
-                            onPressed: () => {},
+                            onPressed: () => {
+                                  MapsLauncher.launchCoordinates(
+                                      coordsOfDestination.latitude,
+                                      coordsOfDestination.longitude)
+                                },
                             style: ElevatedButton.styleFrom(
                                 backgroundColor: const Color(0xFF374151)),
                             child: Text('Google Maps',
