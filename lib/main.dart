@@ -55,6 +55,11 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void handleCancel() {
+    coordsOfDestination = null;
+    enterPage(0);
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -75,7 +80,8 @@ class _MyAppState extends State<MyApp> {
                           LatLng(coordsOfDestination!.latitude!,
                               coordsOfDestination!.longitude!),
                           LatLng(snapshot.data!.target.latitude,
-                              snapshot.data!.target.longitude)),
+                              snapshot.data!.target.longitude),
+                          handleCancel),
             );
           } else {
             return const Align(

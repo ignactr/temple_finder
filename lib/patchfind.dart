@@ -7,19 +7,25 @@ import 'package:geolocator/geolocator.dart';
 class PatchFind extends StatefulWidget {
   final LatLng coordsOfDestination;
   final LatLng sourceLocation;
-  const PatchFind(this.coordsOfDestination, this.sourceLocation, {Key? key})
+  final Function handleCancel;
+  const PatchFind(
+      this.coordsOfDestination, this.sourceLocation, this.handleCancel,
+      {Key? key})
       : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
-    return _PatchFindState(coordsOfDestination, sourceLocation);
+    return _PatchFindState(
+        coordsOfDestination, sourceLocation, this.handleCancel);
   }
 }
 
 class _PatchFindState extends State<PatchFind> {
   final LatLng coordsOfDestination;
   final LatLng sourceLocation;
-  _PatchFindState(this.coordsOfDestination, this.sourceLocation);
+  final Function handleCancel;
+  _PatchFindState(
+      this.coordsOfDestination, this.sourceLocation, this.handleCancel);
 
   final Completer<GoogleMapController> _controller = Completer();
   List<LatLng> polylineCoordinates = [];
@@ -90,36 +96,59 @@ class _PatchFindState extends State<PatchFind> {
   Widget build(BuildContext context) {
     return currentLocation == null
         ? const Center(child: Text('Loading'))
-        : GoogleMap(
-            initialCameraPosition:
-                CameraPosition(target: currentLocation!, zoom: 15),
-            markers: {
-              Marker(
-                markerId: const MarkerId("currentLocation"),
-                position: currentLocation!,
-                //icon: currentLocationIcon
-              ),
-              Marker(
-                markerId: const MarkerId("sourceLocation"),
-                position: sourceLocation,
-                //icon: sourceIcon
-              ),
-              Marker(
-                markerId: const MarkerId("destination"),
-                position: coordsOfDestination,
-                //icon: destinationIcon
-              )
-            },
-            polylines: {
-              Polyline(
-                  polylineId: const PolylineId("route"),
-                  points: polylineCoordinates,
-                  color: const Color(0xFF334155),
-                  width: 5),
-            },
-            onMapCreated: (mapController) {
-              _controller.complete(mapController);
-            },
-          );
+        : Column(children: [
+            SizedBox(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height - 100,
+                child: GoogleMap(
+                  initialCameraPosition:
+                      CameraPosition(target: sourceLocation, zoom: 15),
+                  markers: {
+                    Marker(
+                        markerId: const MarkerId("początek"),
+                        position: sourceLocation),
+                    Marker(
+                        markerId: const MarkerId("cel"),
+                        position: coordsOfDestination)
+                  },
+                  polylines: {
+                    Polyline(
+                        polylineId: const PolylineId("route"),
+                        points: polylineCoordinates,
+                        color: const Color(0xFF334155),
+                        width: 5),
+                  },
+                  onMapCreated: (mapController) {
+                    _controller.complete(mapController);
+                  },
+                )),
+            Container(
+                margin: const EdgeInsets.only(top: 15, right: 5, left: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                        width: 180,
+                        height: 60,
+                        child: ElevatedButton(
+                            onPressed: () => {handleCancel()},
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF374151)),
+                            child: Text('Anuluj',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 20)))),
+                    SizedBox(
+                        width: 180,
+                        height: 60,
+                        child: ElevatedButton(
+                            onPressed: () => {},
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF374151)),
+                            child: Text('Google Maps',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 20))))
+                  ],
+                ))
+          ]);
   }
 }
