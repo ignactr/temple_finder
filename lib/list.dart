@@ -1,9 +1,11 @@
+import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 //import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_geocoder/geocoder.dart';
 import 'dart:math';
 import 'listoftemples.dart';
+import 'data.dart';
 
 class PropListItem extends StatelessWidget {
   final String name;
@@ -70,6 +72,46 @@ class _PropList extends State<PropList> {
   final patchFindHandler;
   _PropList(this.enterPage, this.devicesLocation, this.patchFindHandler);
 
+//function getTempleList() takes hour, weekday and a list of temples with dates and returns a list of just names and addresses
+  List<List<String>> getTempleList(hour, weekday, data) {
+    List<List<String>> templeList = [];
+    for (var i = 0; i < data.length; i++) {
+      int nominator;
+      if (weekday == "Sun") {
+        nominator = 2;
+      } else {
+        nominator = 3;
+      }
+
+      for (var j = 0; j < data[i][nominator].length; j++) {
+        var hourDate = int.parse(data[i][nominator][j].substring(0, 2));
+        if (hour == hourDate) {
+          List<String> list = [];
+          list.add(data[i][0]);
+          list.add(data[i][1]);
+          templeList.add(list);
+        }
+      }
+    }
+    return templeList;
+  }
+
+//function getFutureTempleList() takes a list of temples with dates and returns a list with names and addresses of the earliest mass from current time
+  List<List<String>> getFutureTempleList(data) {
+    final DateTime now = DateTime.now();
+    int hour = int.parse(DateFormat('H').format(now)) + 1;
+    final String weekday = DateFormat('E').format(now);
+    List<List<String>> templeList = [];
+    templeList = getTempleList(hour, weekday, data);
+
+    while (templeList.length == 0) {
+      hour++;
+      templeList = getTempleList(hour, weekday, data);
+    }
+
+    return templeList;
+  }
+
   //function getDistance takes coordinates of two locations and returns distance between them in straight line (km)
   double getDistance(lat1, lon1, lat2, lon2) {
     double p = 0.017453292519943295;
@@ -107,7 +149,7 @@ class _PropList extends State<PropList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: nameAndLocationList(templeList, devicesLocation),
+        future: nameAndLocationList(getFutureTempleList(data), devicesLocation),
         builder: (context, snapshot) {
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
