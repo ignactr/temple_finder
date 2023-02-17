@@ -36,6 +36,7 @@ class _PatchFindState extends State<PatchFind> {
   BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
   BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
 
+  //function adds images from assets floder to BitmapDescriptor variables
   void setCustomMarkerIcon() {
     BitmapDescriptor.fromAssetImage(
             ImageConfiguration.empty, "assets/church.jpg")
@@ -60,6 +61,7 @@ class _PatchFindState extends State<PatchFind> {
     );
   }
 
+  //function that saves route between coordinates in polylineCoordinates variable
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
 
@@ -75,6 +77,7 @@ class _PatchFindState extends State<PatchFind> {
     setState(() {});
   }
 
+  //function gets the current devices location and saves it in currentLocation <LatLng>, function is being invoked every second in initState()
   Future<void> getCurrentLocation() async {
     Position currentPosition = await Geolocator.getCurrentPosition();
     setState(() {
@@ -92,6 +95,7 @@ class _PatchFindState extends State<PatchFind> {
     setCustomMarkerIcon();
     super.initState();
   }
+  //to do: finish icons
 
   @override
   Widget build(BuildContext context) {
