@@ -41,6 +41,7 @@ dependencies:
   geolocator: ^9.0.2
   permission_handler: ^10.2.0
   image: ^4.0.15
+  maps_launcher: ^2.2.0
 
 dev_dependencies:
   flutter_test:
