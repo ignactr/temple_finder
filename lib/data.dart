@@ -37,7 +37,7 @@ List<List<Object>> data = [
   ],
   [
     'Parafia pw. Miłosierdzia Bożego',
-    'Pl. bł. ks. Michała Sopoćki 15-863 Białystok',
+    'Radzymińska 1, 15-863 Białystok',
     ['07:00', '09:00', '10:30', '11:45', '12:30', '15:00', '18:00', '20:00'],
     ['06:30', '07:00', '15:00', '16:30', '18:00']
   ],
