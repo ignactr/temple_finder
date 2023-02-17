@@ -106,10 +106,13 @@ class _PatchFindState extends State<PatchFind> {
                       CameraPosition(target: sourceLocation, zoom: 15),
                   markers: {
                     Marker(
-                        markerId: const MarkerId("początek"),
+                        markerId: const MarkerId("source"),
                         position: sourceLocation),
                     Marker(
-                        markerId: const MarkerId("cel"),
+                        markerId: const MarkerId("current location"),
+                        position: currentLocation!),
+                    Marker(
+                        markerId: const MarkerId("destination"),
                         position: coordsOfDestination)
                   },
                   polylines: {
