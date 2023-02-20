@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'dart:async';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:maps_launcher/maps_launcher.dart';
+import 'dart:ui' as ui;
 
 class PatchFind extends StatefulWidget {
   final LatLng coordsOfDestination;
@@ -32,12 +34,13 @@ class _PatchFindState extends State<PatchFind> {
   List<LatLng> polylineCoordinates = [];
   LatLng? currentLocation;
   Timer? timer;
-  BitmapDescriptor destinationIcon = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor currentLocationIcon = BitmapDescriptor.defaultMarker;
-  BitmapDescriptor sourceIcon = BitmapDescriptor.defaultMarker;
+  // = BitmapDescriptor.defaultMarker;
+  BitmapDescriptor? destinationIcon;
+  BitmapDescriptor? currentLocationIcon;
+  BitmapDescriptor? sourceIcon;
 
   //function adds images from assets floder to BitmapDescriptor variables
-  void setCustomMarkerIcon() {
+  /*void setCustomMarkerIcon() {
     BitmapDescriptor.fromAssetImage(
             ImageConfiguration.empty, "assets/church.jpg")
         .then(
@@ -59,6 +62,27 @@ class _PatchFindState extends State<PatchFind> {
         sourceIcon = icon;
       },
     );
+  }*/
+  Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    ByteData data = await rootBundle.load(path);
+    ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    ui.FrameInfo fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
+        .buffer
+        .asUint8List();
+  }
+
+  Future<void> setCustomMarkerIcon() async {
+    Uint8List destMarkerIcon =
+        await getBytesFromAsset('assets/church.jpg', 100);
+    Uint8List currMarkerIcon =
+        await getBytesFromAsset('assets/person.jpg', 100);
+    Uint8List sourMarkerIcon = await getBytesFromAsset('assets/start.png', 100);
+
+    destinationIcon = BitmapDescriptor.fromBytes(destMarkerIcon);
+    currentLocationIcon = BitmapDescriptor.fromBytes(currMarkerIcon);
+    sourceIcon = BitmapDescriptor.fromBytes(sourMarkerIcon);
   }
 
   //function that saves route between coordinates in polylineCoordinates variable
@@ -99,7 +123,10 @@ class _PatchFindState extends State<PatchFind> {
 
   @override
   Widget build(BuildContext context) {
-    return currentLocation == null
+    return (currentLocation == null ||
+            destinationIcon == null ||
+            currentLocationIcon == null ||
+            sourceIcon == null)
         ? const Center(child: Text('Loading'))
         : Column(children: [
             SizedBox(
@@ -111,13 +138,16 @@ class _PatchFindState extends State<PatchFind> {
                   markers: {
                     Marker(
                         markerId: const MarkerId("source"),
-                        position: sourceLocation),
+                        position: sourceLocation,
+                        icon: sourceIcon!),
                     Marker(
                         markerId: const MarkerId("current location"),
-                        position: currentLocation!),
+                        position: currentLocation!,
+                        icon: currentLocationIcon!),
                     Marker(
                         markerId: const MarkerId("destination"),
-                        position: coordsOfDestination)
+                        position: coordsOfDestination,
+                        icon: destinationIcon!)
                   },
                   polylines: {
                     Polyline(
