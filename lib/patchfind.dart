@@ -127,7 +127,10 @@ class _PatchFindState extends State<PatchFind> {
             destinationIcon == null ||
             currentLocationIcon == null ||
             sourceIcon == null)
-        ? const Center(child: Text('Loading'))
+        ? const Align(
+            alignment: Alignment.center,
+            child: SizedBox(
+                width: 200, height: 200, child: CircularProgressIndicator()))
         : Column(children: [
             SizedBox(
                 width: MediaQuery.of(context).size.width,
