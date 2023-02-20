@@ -75,9 +75,9 @@ class _PatchFindState extends State<PatchFind> {
 
   Future<void> setCustomMarkerIcon() async {
     Uint8List destMarkerIcon =
-        await getBytesFromAsset('assets/church.jpg', 100);
+        await getBytesFromAsset('assets/church.png', 150);
     Uint8List currMarkerIcon =
-        await getBytesFromAsset('assets/person.jpg', 100);
+        await getBytesFromAsset('assets/person.png', 100);
     Uint8List sourMarkerIcon = await getBytesFromAsset('assets/start.png', 100);
 
     destinationIcon = BitmapDescriptor.fromBytes(destMarkerIcon);

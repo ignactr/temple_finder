@@ -65,7 +65,7 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
-  assets: ["assets/church.jpg", "assets/person.jpg", "assets/start.png"]
+  assets: ["assets/church.png", "assets/person.png", "assets/start.png"]
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
