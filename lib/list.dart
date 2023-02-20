@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
 //import 'package:geolocator/geolocator.dart';
@@ -72,12 +74,12 @@ class _PropList extends State<PropList> {
   final patchFindHandler;
   _PropList(this.enterPage, this.devicesLocation, this.patchFindHandler);
 
-//function getTempleList() takes hour, weekday and a list of temples with dates and returns a list of just names and addresses
-  List<List<String>> getTempleList(hour, weekday, data) {
+//function getTempleList() takes hour, bool isSunday and a list of temples with dates and returns a list of just names and addresses
+  List<List<String>> getTempleList(hour, isSunday, data) {
     List<List<String>> templeList = [];
     for (var i = 0; i < data.length; i++) {
       int nominator;
-      if (weekday == "Sun") {
+      if (isSunday) {
         nominator = 2;
       } else {
         nominator = 3;
@@ -98,15 +100,19 @@ class _PropList extends State<PropList> {
 
 //function getFutureTempleList() takes a list of temples with dates and returns a list with names and addresses of the earliest mass from current time
   List<List<String>> getFutureTempleList(data) {
+    var isSunday = false;
     final DateTime now = DateTime.now();
     int hour = int.parse(DateFormat('H').format(now)) + 1;
     final String weekday = DateFormat('E').format(now);
+    if (weekday == "Sun") {
+      isSunday = true;
+    }
     List<List<String>> templeList = [];
-    templeList = getTempleList(hour, weekday, data);
+    templeList = getTempleList(hour, isSunday, data);
 
     while (templeList.length == 0) {
       hour++;
-      templeList = getTempleList(hour, weekday, data);
+      templeList = getTempleList(hour, isSunday, data);
     }
 
     return templeList;
