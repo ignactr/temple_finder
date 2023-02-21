@@ -39,30 +39,6 @@ class _PatchFindState extends State<PatchFind> {
   BitmapDescriptor? currentLocationIcon;
   BitmapDescriptor? sourceIcon;
 
-  //function adds images from assets floder to BitmapDescriptor variables
-  /*void setCustomMarkerIcon() {
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/church.jpg")
-        .then(
-      (icon) {
-        destinationIcon = icon;
-      },
-    );
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/person.jpg")
-        .then(
-      (icon) {
-        currentLocationIcon = icon;
-      },
-    );
-    BitmapDescriptor.fromAssetImage(
-            ImageConfiguration.empty, "assets/start.png")
-        .then(
-      (icon) {
-        sourceIcon = icon;
-      },
-    );
-  }*/
   Future<Uint8List> getBytesFromAsset(String path, int width) async {
     ByteData data = await rootBundle.load(path);
     ui.Codec codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
@@ -115,11 +91,10 @@ class _PatchFindState extends State<PatchFind> {
     getCurrentLocation();
     getPolyPoints();
     timer = Timer.periodic(
-        const Duration(seconds: 1), (Timer t) => getCurrentLocation());
+        const Duration(seconds: 5), (Timer t) => getCurrentLocation());
     setCustomMarkerIcon();
     super.initState();
   }
-  //to do: finish icons
 
   @override
   Widget build(BuildContext context) {
