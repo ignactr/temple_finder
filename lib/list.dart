@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_geocoder/geocoder.dart';
 import 'dart:math';
-import 'listoftemples.dart';
 import 'data.dart';
 
 class PropListItem extends StatelessWidget {
@@ -149,6 +148,8 @@ class _PropList extends State<PropList> {
         ]);
       },
     );
+
+    listToReturn.sort((a, b) => a[2].compareTo(b[2]));
     return listToReturn;
   }
 
