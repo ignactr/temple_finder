@@ -21,6 +21,15 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int _pageNumber = 0;
   Coordinates? coordsOfDestination;
+  String? time;
+  String? weekDay;
+
+  void setTimeAndWeekDay(String timeToSet, String weekDayToSet) {
+    setState(() {
+      time = timeToSet;
+      weekDay = weekDayToSet;
+    });
+  }
 
   void patchFindHandler(Coordinates coords) {
     setState(() {
@@ -57,6 +66,8 @@ class _MyAppState extends State<MyApp> {
 
   void handleCancel() {
     coordsOfDestination = null;
+    time = null;
+    weekDay = null;
     enterPage(0);
   }
 
@@ -73,9 +84,10 @@ class _MyAppState extends State<MyApp> {
                 primaryColor: Colors.white,
               ),
               home: (_pageNumber == 0)
-                  ? StartMapScreen(enterPage, snapshot.data!)
+                  ? StartMapScreen(enterPage, setTimeAndWeekDay, snapshot.data!)
                   : (_pageNumber == 1)
-                      ? PropList(enterPage, snapshot.data!, patchFindHandler)
+                      ? PropList(enterPage, snapshot.data!, patchFindHandler,
+                          time!, weekDay!)
                       : PatchFind(
                           LatLng(coordsOfDestination!.latitude!,
                               coordsOfDestination!.longitude!),

@@ -4,21 +4,24 @@ import 'dart:async';
 
 class StartMapScreen extends StatefulWidget {
   final Function enterPage;
+  final Function setTimeAndWeekDay;
   final CameraPosition devicesLocation;
 
-  StartMapScreen(Function this.enterPage, CameraPosition this.devicesLocation);
+  StartMapScreen(Function this.enterPage, Function this.setTimeAndWeekDay,
+      CameraPosition this.devicesLocation);
 
   @override
   _StartMapScreenState createState() =>
-      _StartMapScreenState(enterPage, this.devicesLocation);
+      _StartMapScreenState(enterPage, setTimeAndWeekDay, this.devicesLocation);
 }
 
 class _StartMapScreenState extends State<StartMapScreen> {
   final enterPage;
+  final Function setTimeAndWeekDay;
   final CameraPosition devicesLocation;
 
-  _StartMapScreenState(
-      @required this.enterPage, CameraPosition this.devicesLocation);
+  _StartMapScreenState(this.enterPage, Function this.setTimeAndWeekDay,
+      CameraPosition this.devicesLocation);
 
   late GoogleMapController _googleMapController;
   String? time;
@@ -148,7 +151,10 @@ class _StartMapScreenState extends State<StartMapScreen> {
                   width: 180,
                   height: 60,
                   child: ElevatedButton(
-                      onPressed: () => {enterPage(1)},
+                      onPressed: () {
+                        setTimeAndWeekDay(time ?? currentTime, weekDay);
+                        enterPage(1);
+                      },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: const Color(0xFF374151)),
                       child: Text('Szukaj nabożeństwa',

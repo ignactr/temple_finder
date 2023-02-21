@@ -60,18 +60,24 @@ class PropList extends StatefulWidget {
   final Function enterPage;
   final CameraPosition devicesLocation;
   final patchFindHandler;
-  PropList(this.enterPage, this.devicesLocation, this.patchFindHandler);
+  final String time;
+  final String weekDay;
+  PropList(this.enterPage, this.devicesLocation, this.patchFindHandler,
+      this.time, this.weekDay);
 
   @override
   _PropList createState() =>
-      _PropList(enterPage, devicesLocation, patchFindHandler);
+      _PropList(enterPage, devicesLocation, patchFindHandler, time, weekDay);
 }
 
 class _PropList extends State<PropList> {
   final Function enterPage;
   final CameraPosition devicesLocation;
   final patchFindHandler;
-  _PropList(this.enterPage, this.devicesLocation, this.patchFindHandler);
+  final String time;
+  final String weekDay;
+  _PropList(this.enterPage, this.devicesLocation, this.patchFindHandler,
+      this.time, this.weekDay);
 
 //function getTempleList() takes hour, bool isSunday and a list of temples with dates and returns a list of just names and addresses
   List<List<String>> getTempleList(hour, isSunday, data) {
