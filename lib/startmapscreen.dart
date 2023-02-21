@@ -20,6 +20,25 @@ class _StartMapScreenState extends State<StartMapScreen> {
       @required this.enterPage, CameraPosition this.devicesLocation);
 
   late GoogleMapController _googleMapController;
+  String? time;
+
+  Future<void> _show() async {
+    final TimeOfDay? result = await showTimePicker(
+        context: context,
+        initialTime: TimeOfDay.now(),
+        builder: (context, childWidget) {
+          return MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                  // Using 24-Hour format
+                  alwaysUse24HourFormat: true),
+              child: childWidget!);
+        });
+    if (result != null) {
+      setState(() {
+        time = '${result.hour}:${result.minute}';
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -34,25 +53,38 @@ class _StartMapScreenState extends State<StartMapScreen> {
         body: Padding(
             padding: const EdgeInsets.all(10),
             child: Column(children: [
+              const SizedBox(height: 20),
+              SizedBox(
+                  height: 50,
+                  width: double.infinity,
+                  child: Row(children: [
+                    SizedBox(
+                        width: 180,
+                        height: 40,
+                        child: ElevatedButton(
+                            onPressed: () => {_show()},
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF374151)),
+                            child: Text('godzina: ${time ?? 'auto'}',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(fontSize: 14))))
+                  ])),
               SizedBox(
                   width: MediaQuery.of(context).size.width,
-                  height: MediaQuery.of(context).size.height - 100,
+                  height: MediaQuery.of(context).size.height - 160,
                   child: Scaffold(
                     body: GoogleMap(
                       myLocationButtonEnabled: false,
                       zoomControlsEnabled: false,
                       initialCameraPosition: devicesLocation,
-                      //initialCameraPosition: _initialCameraPosition,
                       onMapCreated: (controller) =>
                           _googleMapController = controller,
                     ),
                     floatingActionButton: FloatingActionButton(
                       backgroundColor: Theme.of(context).primaryColor,
                       foregroundColor: Colors.black,
-                      onPressed: () => _googleMapController
-                          .animateCamera(CameraUpdate.newCameraPosition(
-                              //_initialCameraPosition)),
-                              devicesLocation)),
+                      onPressed: () => _googleMapController.animateCamera(
+                          CameraUpdate.newCameraPosition(devicesLocation)),
                       child: const Icon(Icons.center_focus_strong),
                     ),
                   )),
