@@ -105,13 +105,16 @@ class _PropList extends State<PropList> {
 
 //function getFutureTempleList() takes a list of temples with dates and returns a list with names and addresses of the earliest mass from current time
   List<List<String>> getFutureTempleList(data) {
-    var isSunday = false;
-    final DateTime now = DateTime.now();
-    int hour = int.parse(DateFormat('H').format(now)) + 1;
-    final String weekday = DateFormat('E').format(now);
-    if (weekday == "Sun") {
+    TimeOfDay formattedTime = TimeOfDay(
+        hour: int.parse(time.split(":")[0]),
+        minute: int.parse(time.split(":")[1]));
+    bool? isSunday;
+    if (weekDay == 'pon-pt') {
+      isSunday = false;
+    } else {
       isSunday = true;
     }
+    int hour = formattedTime.hour + 1;
     List<List<String>> templeList = [];
     templeList = getTempleList(hour, isSunday, data);
 
