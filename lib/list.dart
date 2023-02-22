@@ -96,7 +96,10 @@ class _PropList extends State<PropList> {
           List<String> list = [];
           list.add(data[i][0]);
           list.add(data[i][1]);
+          list.add(data[i][nominator][j]);
+          // print(data[i][nominator][j]);
           templeList.add(list);
+          print(list);
         }
       }
     }
@@ -153,7 +156,7 @@ class _PropList extends State<PropList> {
               firstResult.coordinates.longitude,
               position2.target.latitude,
               position2.target.longitude),
-          row[1]
+          row[2]
         ]);
       },
     );

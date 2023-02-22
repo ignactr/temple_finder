@@ -52,9 +52,13 @@ class _StartMapScreenState extends State<StartMapScreen> {
     });
   }
 
+  void setStateIfMounted(f) {
+    if (mounted) setState(f);
+  }
+
   void getCurrentTime() {
     TimeOfDay timeNotFormatted = TimeOfDay.now();
-    setState(() {
+    setStateIfMounted(() {
       currentTime = '${timeNotFormatted.hour}:${timeNotFormatted.minute}';
     });
   }
