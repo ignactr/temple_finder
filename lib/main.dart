@@ -86,7 +86,7 @@ class _MyAppState extends State<MyApp> {
               home: (_pageNumber == 0)
                   ? StartMapScreen(enterPage, setTimeAndWeekDay, snapshot.data!)
                   : (_pageNumber == 1)
-                      ? PropList(enterPage, snapshot.data!, patchFindHandler,
+                      ? PropList(handleCancel, snapshot.data!, patchFindHandler,
                           time!, weekDay!)
                       : PatchFind(
                           LatLng(coordsOfDestination!.latitude!,

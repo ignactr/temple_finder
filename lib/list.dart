@@ -57,26 +57,26 @@ class PropListItem extends StatelessWidget {
 }
 
 class PropList extends StatefulWidget {
-  final Function enterPage;
+  final Function handleCancel;
   final CameraPosition devicesLocation;
   final patchFindHandler;
   final String time;
   final String weekDay;
-  PropList(this.enterPage, this.devicesLocation, this.patchFindHandler,
+  PropList(this.handleCancel, this.devicesLocation, this.patchFindHandler,
       this.time, this.weekDay);
 
   @override
   _PropList createState() =>
-      _PropList(enterPage, devicesLocation, patchFindHandler, time, weekDay);
+      _PropList(handleCancel, devicesLocation, patchFindHandler, time, weekDay);
 }
 
 class _PropList extends State<PropList> {
-  final Function enterPage;
+  final Function handleCancel;
   final CameraPosition devicesLocation;
   final patchFindHandler;
   final String time;
   final String weekDay;
-  _PropList(this.enterPage, this.devicesLocation, this.patchFindHandler,
+  _PropList(this.handleCancel, this.devicesLocation, this.patchFindHandler,
       this.time, this.weekDay);
 
 //function getTempleList() takes hour, bool isSunday and a list of temples with dates and returns a list of just names and addresses
@@ -174,7 +174,8 @@ class _PropList extends State<PropList> {
                 const SizedBox(height: 20),
                 ListView.builder(
                   shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
+                  itemCount:
+                      snapshot.data!.length > 7 ? 7 : snapshot.data!.length,
                   itemBuilder: (context, index) {
                     return PropListItem(
                         snapshot.data![index][0],
@@ -190,7 +191,7 @@ class _PropList extends State<PropList> {
                       child: Container(
                           margin: const EdgeInsets.only(bottom: 20),
                           child: ElevatedButton(
-                            onPressed: () => {enterPage(0)},
+                            onPressed: () => {handleCancel()},
                             style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(10),
                                 backgroundColor: const Color(0xFF374151)),
