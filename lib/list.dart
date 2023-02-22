@@ -74,13 +74,14 @@ class _PropList extends State<PropList> {
   final Function handleCancel;
   final CameraPosition devicesLocation;
   final patchFindHandler;
-  final String time;
+  String time;
   final String weekDay;
   _PropList(this.handleCancel, this.devicesLocation, this.patchFindHandler,
       this.time, this.weekDay);
 
-//function getTempleList() takes hour, bool isSunday and a list of temples with dates and returns a list of just names and addresses
-  List<List<String>> getTempleList(hour, isSunday, data) {
+//function getTempleList() takes time, time difference from mass in miliseconds, bool isSunday and a list of temples with dates and returns a list of just names and addresses
+// hour in format "07:10"
+  List<List<String>> getTempleList(time, timeDiff, isSunday, data) {
     List<List<String>> templeList = [];
     for (var i = 0; i < data.length; i++) {
       int nominator;
@@ -91,15 +92,19 @@ class _PropList extends State<PropList> {
       }
 
       for (var j = 0; j < data[i][nominator].length; j++) {
-        var hourDate = int.parse(data[i][nominator][j].substring(0, 2));
-        if (hour == hourDate) {
+        var hourData = data[i][nominator][j];
+        final parsedDate1 =
+            DateTime.parse('1970-01-02 $time:00.000').millisecondsSinceEpoch;
+        final parsedDate2 = DateTime.parse('1970-01-02 $hourData:00.000')
+            .millisecondsSinceEpoch;
+
+        if (parsedDate2 - parsedDate1 < timeDiff &&
+            parsedDate2 - parsedDate1 > 0) {
           List<String> list = [];
           list.add(data[i][0]);
           list.add(data[i][1]);
           list.add(data[i][nominator][j]);
-          // print(data[i][nominator][j]);
           templeList.add(list);
-          print(list);
         }
       }
     }
@@ -108,22 +113,23 @@ class _PropList extends State<PropList> {
 
 //function getFutureTempleList() takes a list of temples with dates and returns a list with names and addresses of the earliest mass from current time
   List<List<String>> getFutureTempleList(data) {
-    TimeOfDay formattedTime = TimeOfDay(
-        hour: int.parse(time.split(":")[0]),
-        minute: int.parse(time.split(":")[1]));
-    bool? isSunday;
-    if (weekDay == 'pon-pt') {
-      isSunday = false;
-    } else {
+    int timeDiff = 3600000; // 1 hour in miliseconds
+    // String timeFinal = time;
+    if (time.split(":")[0].length < 2) {
+      time = "0" + time;
+    }
+    if (time.split(":")[1].length < 2) {
+      time = time + "0";
+    }
+    bool isSunday = false;
+    if (weekDay == 'niedziela') {
       isSunday = true;
     }
-    int hour = formattedTime.hour + 1;
     List<List<String>> templeList = [];
-    templeList = getTempleList(hour, isSunday, data);
-
+    templeList = getTempleList(time, timeDiff, isSunday, data);
     while (templeList.length == 0) {
-      hour++;
-      templeList = getTempleList(hour, isSunday, data);
+      timeDiff += 3600000;
+      templeList = getTempleList(time, timeDiff, isSunday, data);
     }
 
     return templeList;
