@@ -83,6 +83,7 @@ class _PropList extends State<PropList> {
 // hour in format "07:10"
   List<List<String>> getTempleList(time, timeDiff, isSunday, data) {
     List<List<String>> templeList = [];
+    //for (var i = 0; i < 20; i++) {
     for (var i = 0; i < data.length; i++) {
       int nominator;
       if (isSunday) {
@@ -114,7 +115,12 @@ class _PropList extends State<PropList> {
 //function getFutureTempleList() takes a list of temples with dates and returns a list with names and addresses of the earliest mass from current time
   List<List<String>> getFutureTempleList(data) {
     int timeDiff = 3600000; // 1 hour in miliseconds
-    // String timeFinal = time;
+    /*if (time.split(":")[0].length < 2) {
+      time = "0" + time;
+    }
+    if (time.split(":")[1].length < 2) {
+      time = time + "0";
+    }*/
     bool isSunday = false;
     if (weekDay == 'niedziela') {
       isSunday = true;
@@ -139,7 +145,7 @@ class _PropList extends State<PropList> {
   }
 
   //function nameAndLocationList uses geocoder packages to turn adress from givenList to coordinates and then display them with names of locations in listToReturn
-  Future<List<List>> nameAndLocationList(
+  Future<List<List>>? nameAndLocationList(
       List<List<String>> givenList, CameraPosition position2) async {
     List<List> listToReturn = [];
     await Future.forEach(
@@ -175,19 +181,35 @@ class _PropList extends State<PropList> {
             return Column(
               children: [
                 const SizedBox(height: 20),
-                ListView.builder(
-                  shrinkWrap: true,
-                  itemCount:
-                      snapshot.data!.length > 7 ? 7 : snapshot.data!.length,
-                  itemBuilder: (context, index) {
-                    return PropListItem(
-                        snapshot.data![index][0],
-                        snapshot.data![index][1],
-                        snapshot.data![index][2],
-                        snapshot.data![index][3],
-                        patchFindHandler);
-                  },
-                ),
+                (snapshot.data!.length == 0)
+                    ? Column(children: [
+                        SizedBox(height: 40),
+                        Container(
+                            decoration: BoxDecoration(
+                                color: const Color(0xFFd1d5db),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(7))),
+                            padding: const EdgeInsets.all(6),
+                            child: Text('Brak wyników',
+                                style: TextStyle(
+                                    decoration: TextDecoration.none,
+                                    fontSize: 21,
+                                    color: Color(0xFF1e293b))))
+                      ])
+                    : ListView.builder(
+                        shrinkWrap: true,
+                        itemCount: snapshot.data!.length > 7
+                            ? 7
+                            : snapshot.data!.length,
+                        itemBuilder: (context, index) {
+                          return PropListItem(
+                              snapshot.data![index][0],
+                              snapshot.data![index][1],
+                              snapshot.data![index][2],
+                              snapshot.data![index][3],
+                              patchFindHandler);
+                        },
+                      ),
                 Expanded(
                   child: Align(
                       alignment: Alignment.bottomCenter,
