@@ -76,7 +76,8 @@ class _StartMapScreenState extends State<StartMapScreen> {
         });
     if (result != null) {
       setState(() {
-        time = '${result.hour}:${result.minute}';
+        time =
+            '${(result.hour < 10) ? '0' + result.hour.toString() : result.hour}:${(result.minute < 10) ? '0' + result.minute.toString() : result.minute}';
       });
     }
   }

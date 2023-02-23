@@ -115,12 +115,6 @@ class _PropList extends State<PropList> {
   List<List<String>> getFutureTempleList(data) {
     int timeDiff = 3600000; // 1 hour in miliseconds
     // String timeFinal = time;
-    if (time.split(":")[0].length < 2) {
-      time = "0" + time;
-    }
-    if (time.split(":")[1].length < 2) {
-      time = time + "0";
-    }
     bool isSunday = false;
     if (weekDay == 'niedziela') {
       isSunday = true;
