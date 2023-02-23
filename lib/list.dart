@@ -12,47 +12,53 @@ class PropListItem extends StatelessWidget {
   final String name;
   final Coordinates coords;
   final double distance;
-  final String address;
+  final String time;
   final patchFindHandler;
-  PropListItem(this.name, this.coords, this.distance, this.address,
-      this.patchFindHandler);
+  PropListItem(
+      this.name, this.coords, this.distance, this.time, this.patchFindHandler);
 
   double roundDouble(double value, int places) {
     double mod = pow(10.0, places).toDouble();
     return ((value * mod).round().toDouble() / mod);
   }
 
-  String formattedAddress() {
-    if (address.length > 50) {
-      return address.substring(0, 51) + '...';
-    } else {
-      return address;
-    }
-  }
+  // String formattedAddress() {
+  //   if (address.length > 50) {
+  //     return address.substring(0, 51) + '...';
+  //   } else {
+  //     return address;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-        message: 'znajdź drogę do tego miejsca',
-        child: Card(
-            color: const Color(0xFFe5e7eb),
-            shadowColor: const Color(0xFFe5e7eb),
-            child: InkWell(
-                onTap: () => {patchFindHandler(coords)},
-                child: Container(
-                  padding: const EdgeInsets.all(6),
-                  child: Column(children: [
-                    Row(children: [
-                      Expanded(
-                        child: Text(name, style: const TextStyle(fontSize: 21)),
-                      ),
-                      Text('${roundDouble(distance, 1)} km',
-                          style: const TextStyle(fontSize: 21)),
-                    ]),
-                    Text(formattedAddress(),
-                        style: const TextStyle(fontSize: 15))
-                  ]),
-                ))));
+      message: 'Znajdź drogę do tego miejsca',
+      child: Card(
+        color: const Color(0xFFe5e7eb),
+        shadowColor: const Color(0xFFe5e7eb),
+        child: InkWell(
+          onTap: () => {patchFindHandler(coords)},
+          child: Container(
+            padding: const EdgeInsets.all(6),
+            child: Column(children: [
+              Row(children: [
+                Expanded(
+                  child: Text(name, style: const TextStyle(fontSize: 21)),
+                ),
+                Text('${roundDouble(distance, 1)} km',
+                    style: const TextStyle(fontSize: 21)),
+              ]),
+              Text(
+                'Rozpoczyna się o $time',
+                style: const TextStyle(fontSize: 18),
+                textAlign: TextAlign.left,
+              ),
+            ]),
+          ),
+        ),
+      ),
+    );
   }
 }
 
@@ -115,12 +121,12 @@ class _PropList extends State<PropList> {
 //function getFutureTempleList() takes a list of temples with dates and returns a list with names and addresses of the earliest mass from current time
   List<List<String>> getFutureTempleList(data) {
     int timeDiff = 3600000; // 1 hour in miliseconds
-    /*if (time.split(":")[0].length < 2) {
+    if (time.split(":")[0].length < 2) {
       time = "0" + time;
     }
     if (time.split(":")[1].length < 2) {
       time = time + "0";
-    }*/
+    }
     bool isSunday = false;
     if (weekDay == 'niedziela') {
       isSunday = true;
