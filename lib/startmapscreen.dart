@@ -61,7 +61,8 @@ class _StartMapScreenState extends State<StartMapScreen> {
   void getCurrentTime() {
     TimeOfDay timeNotFormatted = TimeOfDay.now();
     setStateIfMounted(() {
-      currentTime = '${timeNotFormatted.hour}:${timeNotFormatted.minute}';
+      currentTime =
+          '${(timeNotFormatted.hour < 10) ? '0' + timeNotFormatted.hour.toString() : timeNotFormatted.hour}:${(timeNotFormatted.minute < 10) ? '0' + timeNotFormatted.minute.toString() : timeNotFormatted.minute}';
     });
   }
 
