@@ -121,91 +121,99 @@ class _StartMapScreenState extends State<StartMapScreen> {
   @override
   Widget build(BuildContext content) {
     return FutureBuilder(
-        future: getCurrentLocation(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Scaffold(
-                backgroundColor: const Color(0xFF0f172a),
-                body: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(children: [
-                      const SizedBox(height: 20),
-                      SizedBox(
-                          height: 50,
-                          width: double.infinity,
-                          child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                SizedBox(
-                                    width: 180,
-                                    height: 40,
-                                    child: ElevatedButton(
-                                        onPressed: () => {_show()},
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                const Color(0xFF374151)),
-                                        child: Text(
-                                            'godzina: ${time ?? currentTime}',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontSize: 15)))),
-                                SizedBox(
-                                    width: 180,
-                                    height: 40,
-                                    child: ElevatedButton(
-                                        onPressed: () => {_changeWeekDay()},
-                                        style: ElevatedButton.styleFrom(
-                                            backgroundColor:
-                                                const Color(0xFF374151)),
-                                        child: Text('dzień: $weekDay',
-                                            textAlign: TextAlign.center,
-                                            style: const TextStyle(
-                                                fontSize: 15)))),
-                              ])),
-                      SizedBox(
-                          width: MediaQuery.of(context).size.width,
-                          height: MediaQuery.of(context).size.height - 160,
-                          child: Scaffold(
-                            body: GoogleMap(
-                              myLocationButtonEnabled: false,
-                              zoomControlsEnabled: false,
-                              initialCameraPosition: snapshot.data!,
-                              onMapCreated: (controller) =>
-                                  _googleMapController = controller,
-                            ),
-                            floatingActionButton: FloatingActionButton(
-                              backgroundColor: Theme.of(context).primaryColor,
-                              foregroundColor: Colors.black,
-                              onPressed: () => _googleMapController
-                                  .animateCamera(CameraUpdate.newCameraPosition(
-                                      snapshot.data!)),
-                              child: const Icon(Icons.center_focus_strong),
-                            ),
-                          )),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                          width: 180,
-                          height: 60,
-                          child: ElevatedButton(
-                              onPressed: () {
-                                setTimeAndWeekDay(time ?? currentTime, weekDay);
-                                setCurrentLocation(snapshot.data!);
-                                enterPage(1);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF374151)),
-                              child: Text('Szukaj nabożeństwa',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(fontSize: 20))))
-                    ])));
-          } else {
-            return const Align(
-                alignment: Alignment.center,
-                child: SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: CircularProgressIndicator()));
-          }
-        });
+      future: getCurrentLocation(),
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Scaffold(
+              backgroundColor: const Color(0xFF0f172a),
+              body: Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: Column(children: [
+                    const SizedBox(height: 20),
+                    SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              SizedBox(
+                                  width: 180,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                      onPressed: () => {_show()},
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              Color.fromARGB(255, 55, 71, 97)),
+                                      child: Text(
+                                          'godzina: ${time ?? currentTime}',
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(fontSize: 15)))),
+                              SizedBox(
+                                  width: 180,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                      onPressed: () => {_changeWeekDay()},
+                                      style: ElevatedButton.styleFrom(
+                                          backgroundColor:
+                                              Color.fromARGB(255, 55, 71, 97)),
+                                      child: Text('dzień: $weekDay',
+                                          textAlign: TextAlign.center,
+                                          style:
+                                              const TextStyle(fontSize: 15)))),
+                            ])),
+                    SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height - 160,
+                        child: Scaffold(
+                          body: GoogleMap(
+                            myLocationButtonEnabled: false,
+                            zoomControlsEnabled: false,
+                            initialCameraPosition: snapshot.data!,
+                            onMapCreated: (controller) =>
+                                _googleMapController = controller,
+                          ),
+                          floatingActionButton: FloatingActionButton(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            foregroundColor: Colors.black,
+                            onPressed: () => _googleMapController.animateCamera(
+                                CameraUpdate.newCameraPosition(snapshot.data!)),
+                            child: const Icon(Icons.center_focus_strong),
+                          ),
+                        )),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                        width: 180,
+                        height: 60,
+                        child: ElevatedButton(
+                            onPressed: () {
+                              setTimeAndWeekDay(time ?? currentTime, weekDay);
+                              setCurrentLocation(snapshot.data!);
+                              enterPage(1);
+                            },
+                            style: ElevatedButton.styleFrom(
+                                backgroundColor:
+                                    Color.fromARGB(255, 156, 30, 83)),
+                            child: Text('Szukaj nabożeństwa',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(fontSize: 20))))
+                  ])));
+        } else {
+          return Scaffold(
+            backgroundColor: const Color(0xFF0f172a),
+            body: const Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 200,
+                height: 200,
+                child: CircularProgressIndicator(
+                  color: Color.fromARGB(255, 156, 30, 83),
+                ),
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 }

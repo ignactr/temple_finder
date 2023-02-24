@@ -180,11 +180,13 @@ class _PropList extends State<PropList> {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: nameAndLocationList(getFutureTempleList(data), devicesLocation),
-        builder: (context, snapshot) {
-          if (snapshot.hasData &&
-              snapshot.connectionState == ConnectionState.done) {
-            return Column(
+      future: nameAndLocationList(getFutureTempleList(data), devicesLocation),
+      builder: (context, snapshot) {
+        if (snapshot.hasData &&
+            snapshot.connectionState == ConnectionState.done) {
+          return Scaffold(
+            backgroundColor: const Color(0xFF0f172a),
+            body: Column(
               children: [
                 const SizedBox(height: 20),
                 (snapshot.data!.length == 0)
@@ -225,7 +227,8 @@ class _PropList extends State<PropList> {
                             onPressed: () => {handleCancel()},
                             style: ElevatedButton.styleFrom(
                                 padding: const EdgeInsets.all(10),
-                                backgroundColor: const Color(0xFF374151)),
+                                backgroundColor:
+                                    Color.fromARGB(255, 55, 71, 97)),
                             child: const Text(
                               'Powrót',
                               style: TextStyle(fontSize: 21),
@@ -233,15 +236,24 @@ class _PropList extends State<PropList> {
                           ))),
                 )
               ],
-            );
-          } else {
-            return const Align(
-                alignment: Alignment.center,
-                child: SizedBox(
-                    width: 200,
-                    height: 200,
-                    child: CircularProgressIndicator()));
-          }
-        });
+            ),
+          );
+        } else {
+          return Scaffold(
+            backgroundColor: const Color(0xFF0f172a),
+            body: const Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 200,
+                height: 200,
+                child: CircularProgressIndicator(
+                  color: Color.fromARGB(255, 156, 30, 83),
+                ),
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 }
