@@ -17,18 +17,13 @@ class PropListItem extends StatelessWidget {
   PropListItem(
       this.name, this.coords, this.distance, this.time, this.patchFindHandler);
 
+  late int muchOfName = (name.length * 0.8).toInt();
+  late int halfOfName = (name.length ~/ 2).toInt();
+
   double roundDouble(double value, int places) {
     double mod = pow(10.0, places).toDouble();
     return ((value * mod).round().toDouble() / mod);
   }
-
-  // String formattedAddress() {
-  //   if (address.length > 50) {
-  //     return address.substring(0, 51) + '...';
-  //   } else {
-  //     return address;
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -40,22 +35,50 @@ class PropListItem extends StatelessWidget {
         child: InkWell(
           onTap: () => {patchFindHandler(coords)},
           child: Container(
-            padding: const EdgeInsets.all(6),
-            child: Column(children: [
-              Row(children: [
-                Expanded(
-                  child: Text(name, style: const TextStyle(fontSize: 21)),
-                ),
-                Text('${roundDouble(distance, 1)} km',
-                    style: const TextStyle(fontSize: 21)),
-              ]),
-              Text(
-                'Rozpoczyna się o $time',
-                style: const TextStyle(fontSize: 18),
-                textAlign: TextAlign.left,
-              ),
-            ]),
-          ),
+              padding: const EdgeInsets.all(6),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    children: [
+                      Text(
+                          (name.length < 37 &&
+                                  name.substring(muchOfName, muchOfName + 1) ==
+                                      ' ')
+                              ? name.substring(0, muchOfName)
+                              : (name.length < 37 &&
+                                      name.substring(
+                                              muchOfName, muchOfName + 1) !=
+                                          ' ')
+                                  ? '${name.substring(0, muchOfName)}-'
+                                  : (name.length > 36 &&
+                                          name.substring(
+                                                  halfOfName, halfOfName + 1) ==
+                                              ' ')
+                                      ? name.substring(0, halfOfName)
+                                      : '${name.substring(0, halfOfName)}-',
+                          style: const TextStyle(fontSize: 21)),
+                      Text(
+                        (name.length < 37)
+                            ? name.substring(muchOfName)
+                            : name.substring(halfOfName),
+                        style: const TextStyle(fontSize: 21),
+                        textAlign: TextAlign.left,
+                      ),
+                      Text(
+                        'Rozpoczyna się o $time',
+                        style: const TextStyle(fontSize: 18),
+                        //textAlign: TextAlign.left,
+                      ),
+                    ],
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: Text('${roundDouble(distance, 1)} km',
+                        style: const TextStyle(fontSize: 21)),
+                  )
+                ],
+              )),
         ),
       ),
     );
