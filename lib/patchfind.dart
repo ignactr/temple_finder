@@ -102,73 +102,93 @@ class _PatchFindState extends State<PatchFind> {
             destinationIcon == null ||
             currentLocationIcon == null ||
             sourceIcon == null)
-        ? const Align(
-            alignment: Alignment.center,
-            child: SizedBox(
-                width: 200, height: 200, child: CircularProgressIndicator()))
-        : Column(children: [
-            SizedBox(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height - 100,
-                child: GoogleMap(
-                  initialCameraPosition:
-                      CameraPosition(target: sourceLocation, zoom: 15),
-                  markers: {
-                    Marker(
-                        markerId: const MarkerId("source"),
-                        position: sourceLocation,
-                        icon: sourceIcon!),
-                    Marker(
-                        markerId: const MarkerId("current location"),
-                        position: currentLocation!,
-                        icon: currentLocationIcon!),
-                    Marker(
-                        markerId: const MarkerId("destination"),
-                        position: coordsOfDestination,
-                        icon: destinationIcon!)
-                  },
-                  polylines: {
-                    Polyline(
-                        polylineId: const PolylineId("route"),
-                        points: polylineCoordinates,
-                        color: const Color(0xFF334155),
-                        width: 5),
-                  },
-                  onMapCreated: (mapController) {
-                    _controller.complete(mapController);
-                  },
-                )),
-            Container(
-                margin: const EdgeInsets.only(top: 15, right: 5, left: 5),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    SizedBox(
+        ? Scaffold(
+            backgroundColor: const Color(0xFF0f172a),
+            body: const Align(
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: 200,
+                height: 200,
+                child: CircularProgressIndicator(
+                  color: Color.fromARGB(255, 156, 30, 83),
+                ),
+              ),
+            ),
+          )
+        : Scaffold(
+            backgroundColor: const Color(0xFF0f172a),
+            body: Column(
+              children: [
+                SizedBox(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height - 100,
+                    child: GoogleMap(
+                      initialCameraPosition:
+                          CameraPosition(target: sourceLocation, zoom: 15),
+                      markers: {
+                        Marker(
+                            markerId: const MarkerId("source"),
+                            position: sourceLocation,
+                            icon: sourceIcon!),
+                        Marker(
+                            markerId: const MarkerId("current location"),
+                            position: currentLocation!,
+                            icon: currentLocationIcon!),
+                        Marker(
+                            markerId: const MarkerId("destination"),
+                            position: coordsOfDestination,
+                            icon: destinationIcon!)
+                      },
+                      polylines: {
+                        Polyline(
+                            polylineId: const PolylineId("route"),
+                            points: polylineCoordinates,
+                            color: Color.fromARGB(255, 55, 71, 97),
+                            width: 5),
+                      },
+                      onMapCreated: (mapController) {
+                        _controller.complete(mapController);
+                      },
+                    )),
+                Container(
+                  margin: const EdgeInsets.only(top: 15, right: 5, left: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      SizedBox(
+                          width: 180,
+                          height: 60,
+                          child: ElevatedButton(
+                              onPressed: () => {handleCancel()},
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor:
+                                      Color.fromARGB(255, 55, 71, 97)),
+                              child: Text('Anuluj',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(fontSize: 20)))),
+                      SizedBox(
                         width: 180,
                         height: 60,
                         child: ElevatedButton(
-                            onPressed: () => {handleCancel()},
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF374151)),
-                            child: Text('Anuluj',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20)))),
-                    SizedBox(
-                        width: 180,
-                        height: 60,
-                        child: ElevatedButton(
-                            onPressed: () => {
-                                  MapsLauncher.launchCoordinates(
-                                      coordsOfDestination.latitude,
-                                      coordsOfDestination.longitude)
-                                },
-                            style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xFF374151)),
-                            child: Text('Google Maps',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(fontSize: 20))))
-                  ],
-                ))
-          ]);
+                          onPressed: () => {
+                            MapsLauncher.launchCoordinates(
+                                coordsOfDestination.latitude,
+                                coordsOfDestination.longitude)
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Color.fromARGB(255, 55, 71, 97)),
+                          child: Text(
+                            'Google Maps',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
   }
 }
