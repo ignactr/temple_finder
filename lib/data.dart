@@ -361,7 +361,7 @@ List<List<Object>> data = [
   ],
   [
     'Parafia pw. Świętej Trójcy',
-    'ul. Królowej Rodzin 2 Juchnowiec 16-061',
+    'Lipowa 4, 16-061 Juchnowiec Kościelny',
     ['08:00', '09:30', '11:30'],
     ['07:00', '17:00', '19:00']
   ],
