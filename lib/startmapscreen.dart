@@ -193,8 +193,7 @@ class _StartMapScreenState extends State<StartMapScreen> {
                               enterPage(1);
                             },
                             style: ElevatedButton.styleFrom(
-                                backgroundColor:
-                                    Color.fromARGB(255, 156, 30, 83)),
+                                backgroundColor: Colors.pink[700]),
                             child: Text('Szukaj nabożeństwa',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(fontSize: 20))))
@@ -202,13 +201,13 @@ class _StartMapScreenState extends State<StartMapScreen> {
         } else {
           return Scaffold(
             backgroundColor: const Color(0xFF0f172a),
-            body: const Align(
+            body: Align(
               alignment: Alignment.center,
               child: SizedBox(
                 width: 200,
                 height: 200,
                 child: CircularProgressIndicator(
-                  color: Color.fromARGB(255, 156, 30, 83),
+                  color: Colors.pink[700],
                 ),
               ),
             ),

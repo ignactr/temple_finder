@@ -30,8 +30,8 @@ class PropListItem extends StatelessWidget {
     return Tooltip(
       message: 'Znajdź drogę do tego miejsca',
       child: Card(
-        color: const Color(0xFFe5e7eb),
-        shadowColor: const Color(0xFFe5e7eb),
+        color: Colors.pink[700],
+        shadowColor: Colors.pink[700],
         child: InkWell(
           onTap: () => {patchFindHandler(coords)},
           child: Container(
@@ -41,41 +41,41 @@ class PropListItem extends StatelessWidget {
                 children: [
                   Column(
                     children: [
-                      Text(
-                          (name.length < 37 &&
-                                  name.substring(muchOfName, muchOfName + 1) ==
-                                      ' ')
-                              ? name.substring(0, muchOfName)
-                              : (name.length < 37 &&
-                                      name.substring(
-                                              muchOfName, muchOfName + 1) !=
-                                          ' ')
-                                  ? '${name.substring(0, muchOfName)}-'
-                                  : (name.length > 36 &&
-                                          name.substring(
-                                                  halfOfName, halfOfName + 1) ==
-                                              ' ')
-                                      ? name.substring(0, halfOfName)
-                                      : '${name.substring(0, halfOfName)}-',
-                          style: const TextStyle(fontSize: 21)),
-                      Text(
-                        (name.length < 37)
-                            ? name.substring(muchOfName)
-                            : name.substring(halfOfName),
-                        style: const TextStyle(fontSize: 21),
-                        textAlign: TextAlign.left,
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        height: 49,
+                        child: Container(
+                            alignment: Alignment.center,
+                            child: Text(
+                              name,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                  fontSize: 21, color: Colors.white),
+                            )),
                       ),
-                      Text(
-                        'Rozpoczyna się o $time',
-                        style: const TextStyle(fontSize: 18),
-                        //textAlign: TextAlign.left,
+                      RichText(
+                        text: TextSpan(
+                          style: DefaultTextStyle.of(context).style,
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: 'Najwcześniej o ',
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white70)),
+                            TextSpan(
+                              text: '$time',
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.white),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
                   Align(
                     alignment: Alignment.centerRight,
                     child: Text('${roundDouble(distance, 1)} km',
-                        style: const TextStyle(fontSize: 21)),
+                        style:
+                            const TextStyle(fontSize: 21, color: Colors.white)),
                   )
                 ],
               )),
@@ -264,13 +264,13 @@ class _PropList extends State<PropList> {
         } else {
           return Scaffold(
             backgroundColor: const Color(0xFF0f172a),
-            body: const Align(
+            body: Align(
               alignment: Alignment.center,
               child: SizedBox(
                 width: 200,
                 height: 200,
                 child: CircularProgressIndicator(
-                  color: Color.fromARGB(255, 156, 30, 83),
+                  color: Colors.pink[700],
                 ),
               ),
             ),

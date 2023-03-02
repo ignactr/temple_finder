@@ -104,13 +104,13 @@ class _PatchFindState extends State<PatchFind> {
             sourceIcon == null)
         ? Scaffold(
             backgroundColor: const Color(0xFF0f172a),
-            body: const Align(
+            body: Align(
               alignment: Alignment.center,
               child: SizedBox(
                 width: 200,
                 height: 200,
                 child: CircularProgressIndicator(
-                  color: Color.fromARGB(255, 156, 30, 83),
+                  color: Colors.pink[700],
                 ),
               ),
             ),
